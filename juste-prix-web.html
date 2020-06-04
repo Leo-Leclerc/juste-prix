@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juste Prix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body id="body">
+    <header id="header">
+        <h1>Le juste prix</h1>
+        <hr>
+        <h4>Trouver le prix choisi par l'IA compris entre 1 et 1000, vous avez 10 essais, bonne chance !</h4>
+    </header>
+
+    <button type="button" name="jouer" id="jouer" onclick="choixIA()">jouer</button>
+
+    <div id="choixprix">
+
+    </div>
+
+    <button style="display: none;" type="button" id="reset" onclick="reset()">Rejouer</button>
+
+
+    <style type="text/css">
+
+        html{
+            height: -webkit-fill-available;
+        }
+
+        body{
+            box-sizing: border-box;
+            margin: 0;
+            margin-left: 200px;
+            background-color: rgba(0, 0, 0);
+            background-image: url(https://image.winudf.com/v2/image1/Y29tLm1heGxhYi5mYWxsaW5nbW9uZXl3YWxscGFwZXJsdGVfc2NyZWVuXzE0XzE1NDg2NTQ0MDlfMDcw/screen-14.jpg?fakeurl=1&type=.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: bottom;
+        }
+
+        h1{
+            margin: 0;
+            padding-top: 50px;
+            padding-left: 50px;
+            font-family: 'Balsamiq Sans', cursive; 
+            font-size: 60px;
+            color: rgb(255, 255, 0);
+            letter-spacing: 5px;
+        }
+
+        h4{
+            margin: 0;
+            padding-left: 50px;
+            padding-bottom: 20px;
+            font-family: 'Balsamiq Sans', cursive;
+            font-size: 16px;
+            color: rgb(255, 255, 0);
+            letter-spacing: 1px;
+        }
+
+        h4#txtchoix{
+            margin: 0;
+            padding: 0;
+            padding-top: 20px;
+            padding-left: 10px;
+            font-family: 'Balsamiq Sans', cursive;
+            font-size: 16px;
+            color: rgb(255, 255, 0);
+            letter-spacing: 1px;
+            font-weight: lighter;
+        }
+
+        p{
+            margin: 0;
+            margin-top: 20px;
+            padding-left: 10px;
+            font-family: 'Balsamiq Sans', cursive;
+            font-size: 16px;
+            color: rgb(255, 255, 0);
+            letter-spacing: 1px;
+        }
+
+        hr{
+            width: 500px;
+            border-color: yellow;
+            margin-left: 50px;
+        }
+
+        button{
+            background-color: yellow;
+            border: none;
+            padding: 10px;
+            font-family: 'Balsamiq Sans', cursive; 
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 5px;
+            
+        }
+
+        input{
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            margin: 10px;
+            font-family: 'Balsamiq Sans', cursive;
+        }
+
+        textarea{
+            font-family: 'Balsamiq Sans', cursive;
+            padding: 10px;
+            padding-left: 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+
+        }
+        textarea#dial{
+            position: relative;
+            bottom: 150px;
+            left: 500px;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+        //Variables
+
+        var choix;
+        var plus = "C'est plus !\tDernier prix essayé : ";
+        var moins = "C'est moins !\tDernier prix essayé : ";
+        var win = "Vous avez gagné !\tC'était bien ";
+        var loose = "Vous avez perdu !\tLe prix était de : ";
+        var saut = "\n\n";
+        var v;
+
+
+
+        //mise a jour du score
+
+        function CheckScore() {
+            if (document.getElementById("essais").value == 0) {
+                var dial = document.getElementById("dial").value;
+                document.getElementById("dial").value = loose + v + saut + dial;
+                document.getElementById("reset").style.display = "flex";
+                document.getElementById("valider").style.display = "none";
+            }
+        }
+        // Choix de l'IA et affichage de l'HUD
+
+        function choixIA() {
+            v = Math.floor(Math.random() * 1001 + 1);
+            var jeux = document.createElement("div");
+            jeux.id = "jeux";
+            document.getElementById("body").appendChild(jeux);
+            var h4jeux = document.createElement("h4");
+            h4jeux.id = "txtchoix";
+            h4jeux.innerText = "Entrez votre prix :";
+            document.getElementById("choixprix").appendChild(h4jeux);
+            var inputchoix = document.createElement("input");
+            inputchoix.type = "number";
+            inputchoix.name = "prix";
+            inputchoix.id = "prix";
+            inputchoix.placeholder = "Entrez un prix";
+            document.getElementById("choixprix").appendChild(inputchoix);
+            var validerchoix = document.createElement("button");
+            validerchoix.type = "button";
+            validerchoix.name = "valider";
+            validerchoix.id = "valider";
+            validerchoix.addEventListener('click', choixj);
+            validerchoix.innerText = "valider";
+            document.getElementById("choixprix").appendChild(validerchoix);
+            var pessai = document.createElement("p");
+            pessai.innerText = "Essai(s) restant(s) :";
+            document.getElementById("choixprix").appendChild(pessai);
+            var inputessai = document.createElement("input");
+            inputessai.style.width = "30px";
+            inputessai.type = "number";
+            inputessai.name = "essais";
+            inputessai.id = "essais";
+            inputessai.value = "10";
+            document.getElementById("choixprix").appendChild(inputessai);
+            var dial = document.createElement("textarea");
+            dial.style.border = "none";
+            dial.style.marginTop = "2px";
+            dial.name = "dialogue";
+            dial.id = "dial";
+            dial.cols = "50";
+            dial.rows = "15";
+            dial.innerText = "Le jeu débute !";
+            document.getElementById("jeux").appendChild(dial);
+            document.getElementById("jouer").style.display = "none";
+            console.log(v);
+            return v;
+        }
+
+        function choixIAnew() {
+            v = Math.floor(Math.random() * 1001 + 1);
+        }
+
+        // Résultats en fonction du choix de l'IA
+
+        function choixj() {
+            var choixjoueur = document.getElementById("prix").value;
+            if (choixjoueur < v) {
+                var dial = document.getElementById("dial").value;
+                document.getElementById("dial").value = plus + document.getElementById("prix").value + saut + dial;
+                var essais, essais2;
+                essais = Number(document.getElementById("essais").value);
+                essais2 = essais - 1;
+                document.getElementById("essais").value = essais2;
+                CheckScore();
+            }
+            if (choixjoueur > v) {
+                var dial = document.getElementById("dial").value;
+                document.getElementById("dial").value = moins + document.getElementById("prix").value + saut + dial;
+                var essais, essais2;
+                essais = Number(document.getElementById("essais").value);
+                essais2 = essais - 1;
+                document.getElementById("essais").value = essais2;
+                CheckScore();
+            }
+            if (choixjoueur == v) {
+                var dial = document.getElementById("dial").value;
+                document.getElementById("dial").value = win + v + saut + dial;
+                document.getElementById("reset").style.display = "flex";
+                document.getElementById("valider").style.display = "none";
+            }
+            return choixjoueur;
+        }
+
+        // Recommencer une partie
+
+        function reset() {
+            document.getElementById("reset").style.display = "none";
+            document.getElementById("dial").style.marginTop = "2px";
+            document.getElementById("dial").value = "Le jeu débute !";
+            document.getElementById("valider").style.display = "inline";
+            document.getElementById("essais").value = 10;
+            choixIAnew();
+        }
+
+
+    </script>
+</body>
+
+</html>
